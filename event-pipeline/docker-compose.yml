@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: event_pipeline_postgres
+    environment:
+      POSTGRES_DB: event_pipeline
+      POSTGRES_USER: event_user
+      POSTGRES_PASSWORD: event_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - event_pipeline_data:/var/lib/postgresql/data
+
+volumes:
+  event_pipeline_data:

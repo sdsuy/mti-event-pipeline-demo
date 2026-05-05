@@ -25,9 +25,9 @@ External Webinar System → Java API → Processing Layer → Database → CRM S
 - Java 17
 - Spring Boot
 - Maven
-- PostgreSQL (planned)
+- PostgreSQL
 - REST APIs
-- Docker Compose (planned)
+- Docker Compose
 - Spring Boot Actuator
 - Structured logging (planned)
 
@@ -41,7 +41,7 @@ Current phase:
 - ✅ Health check endpoint
 - ✅ Basic API endpoint
 - ✅ Event ingestion endpoint with validation
-- ⏳ Database integration (next)
+- ✅ PostgreSQL integration with Docker Compose
 - ⏳ Processing layer
 - ⏳ CRM sync simulation
 - ⏳ Troubleshooting scenarios
@@ -153,15 +153,16 @@ Invalid input will return:
 
 ## 🧠 Design Decisions (So Far)
 
-### 1. No Database Yet
+### 1. PostgreSQL from Early Development
 
-The datasource auto-configuration is temporarily disabled to allow incremental development of the API layer before introducing persistence.
+The project now uses PostgreSQL through Docker Compose to simulate a real backend environment.
 
-This approach allows:
+This helps demonstrate:
 
-- Faster iteration
-- Isolated API testing
-- Clear commit history of system evolution
+- Local infrastructure setup
+- Real datasource configuration
+- JPA entity mapping
+- Repository-based persistence
 
 ---
 
@@ -202,15 +203,34 @@ If you see:
 Failed to configure a DataSource
 ```
 
-It means the application expects a database configuration.
+It usually means PostgreSQL is not running or the datasource URL/credentials are incorrect.
 
-Temporary solution:
-
-- Disable datasource auto-configuration
-- Or run build without tests:
+Start the database with:
 
 ```bash
-mvn clean verify -DskipTests
+docker compose up -d
+```
+
+Then run:
+
+```bash
+mvn clean verify
+```
+
+---
+
+### Check running containers
+
+```bash
+docker ps
+```
+
+---
+
+### Stop database
+
+```bash
+docker compose down
 ```
 
 ---
@@ -219,18 +239,23 @@ mvn clean verify -DskipTests
 
 ```
 event-pipeline/
-├── controller/
-├── dto/
-├── application/
-└── resources/
+├── docker-compose.yml
+├── src/main/java/com/santiago/mti/eventpipeline/
+│   ├── controller/
+│   ├── dto/
+│   ├── entity/
+│   ├── repository/
+│   └── EventPipelineApplication.java
+└── src/main/resources/
+    └── application.yml
 ```
 
 ---
 
 ## 🧭 Next Steps
 
-- Add PostgreSQL integration
-- Introduce entity and repository layer
+- Introduce processing service layer
+- Simulate CRM synchronization
 - Implement processing service
 - Simulate external integrations (CRM)
 - Add structured logging
