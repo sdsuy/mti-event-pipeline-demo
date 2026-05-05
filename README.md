@@ -28,3 +28,15 @@ External Webinar System → Java API → Database → CRM Sync Simulation
 ## Project Status
 
 Initial setup in progress.
+
+## Available Endpoints
+
+### Health Check
+GET /health
+
+Used to verify that the service is running.
+
+### Test Endpoint
+GET /api/events/test
+
+Basic endpoint to validate API responsiveness.
