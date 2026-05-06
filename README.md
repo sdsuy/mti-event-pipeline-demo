@@ -29,7 +29,7 @@ External Webinar System → Java API → Processing Layer → Database → CRM S
 - REST APIs
 - Docker Compose
 - Spring Boot Actuator
-- Structured logging (planned)
+- Structured logging
 
 ---
 
@@ -41,8 +41,10 @@ Current phase:
 - ✅ Health check endpoint
 - ✅ Basic API endpoint
 - ✅ Event ingestion endpoint with validation
+- ✅ Service layer for event processing
+- ✅ Basic operational logging
 - ✅ PostgreSQL integration with Docker Compose
-- ⏳ Processing layer
+- ✅ Processing layer
 - ⏳ CRM sync simulation
 - ⏳ Troubleshooting scenarios
 
@@ -193,6 +195,30 @@ This reflects real-world backend design where:
 
 ---
 
+### 4. Service Layer Separation
+
+The controller delegates business logic to a service layer.
+
+This keeps responsibilities clear:
+
+- Controller: HTTP input/output
+- Service: business workflow and processing decisions
+- Repository: persistence
+
+---
+
+### 5. Operational Logging
+
+The service logs important processing steps such as:
+
+- Event received
+- Event persisted
+- Processing decisions
+
+This supports troubleshooting in production-like systems.
+
+---
+
 ## 🔍 Troubleshooting Notes
 
 ### Build fails due to datasource
@@ -245,6 +271,7 @@ event-pipeline/
 │   ├── dto/
 │   ├── entity/
 │   ├── repository/
+│   ├── service/
 │   └── EventPipelineApplication.java
 └── src/main/resources/
     └── application.yml
@@ -254,8 +281,9 @@ event-pipeline/
 
 ## 🧭 Next Steps
 
-- Introduce processing service layer
 - Simulate CRM synchronization
+- Add event processing status
+- Add failure scenarios for debugging practice
 - Implement processing service
 - Simulate external integrations (CRM)
 - Add structured logging

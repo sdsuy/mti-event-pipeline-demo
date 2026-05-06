@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.santiago.mti.eventpipeline.dto.WebinarEventRequest;
 import com.santiago.mti.eventpipeline.entity.WebinarEvent;
-import com.santiago.mti.eventpipeline.repository.WebinarEventRepository;
+import com.santiago.mti.eventpipeline.service.EventService;
 
 import jakarta.validation.Valid;
 
@@ -20,23 +20,17 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/events")
 public class EventController {
 
-    private final WebinarEventRepository repository;
+    private final EventService eventService;
     
-    public EventController(WebinarEventRepository repository) {
-        this.repository = repository;
+    public EventController(EventService eventService) {
+        this.eventService = eventService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Map<String, Object> receiveEvent(@Valid @RequestBody WebinarEventRequest request) {
-        WebinarEvent event = new WebinarEvent(
-                request.getWebinarId(),
-                request.getAttendeeName(),
-                request.getAttendeeEmail(),
-                request.getDurationMinutes()
-        );
 
-        WebinarEvent savedEvent = repository.save(event);
+        WebinarEvent savedEvent = eventService.receiveEvent(request);
 
         return Map.of(
                 "status", "ACCEPTED",
